@@ -1,11 +1,13 @@
 import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Dashboard from './Dashboard';
 import Customer from './Customer';
 import Property from './Property';
 import Facilities from './Facilities';
 import Categories from './Categories';
+import Slider from './Slider';
+import { Navigate } from 'react-router-dom';
 
 const Home = () => {
   return (
@@ -14,15 +16,16 @@ const Home = () => {
       <Sidebar />
 
       {/* Right Content */}
-      <div className="flex-grow bg-f7f7f7 p-6 ml-20">
+      <div className="flex-grow bg-f7f7f7 p-6">
         <Routes>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="customer" element={<Customer />} />
-          <Route path="property" element={<Property />} />
-          <Route path="facilities" element={<Facilities />} />
-          <Route path="categories" element={<Categories />} />
-          {/* Default redirect to dashboard */}
-          <Route path="*" element={<Navigate to="dashboard" />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/customers" element={<Customer />} />
+          <Route path="/property" element={<Property />} />
+          <Route path="/facilities" element={<Facilities />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/slider" element={<Slider />} />
+          {/* Redirect to /dashboard if no path matches */}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </div>
     </div>

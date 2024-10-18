@@ -38,7 +38,7 @@ const Login = () => {
         document.cookie = `isLogged=true; path=/; ${isSecure ? 'secure;' : ''} SameSite=Strict`;
         
         console.log('Login successful');
-        navigate('/home'); // Redirect to the home screen after login
+        navigate('/dashboard'); // Redirect to the home screen after login
       } else {
         const result = await response.json();
         setError(result.message || 'Login failed'); // Display error message from API

@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 import { FaUserCircle, FaHome, FaClipboardList, FaMapMarkerAlt, FaBuilding, FaSlidersH } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import config from '../configs/config';
 
 const Sidebar = () => {
-  const [selectedItem, setSelectedItem] = useState('dashboard');
+  const location = useLocation(); // Get current URL
   const navigate = useNavigate();
 
-  const handleSignout = () => {
-    // Clear cookies and localStorage/sessionStorage on signout
-    document.cookie = 'isLogged=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    navigate('/login'); // Redirect to login page
+  const handleSignout = async () => {
+    try {
+      const response = await fetch(`${config.baseUrl}/auth/signout`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        document.cookie = "isLogged=; path=/; max-age=0; SameSite=Strict";
+        navigate('/login');
+      } else {
+        console.error('Failed to log out');
+      }
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
   };
+
+  const isSelected = (path) => location.pathname === path; // Check if the current path matches
 
   return (
     <div className="flex flex-col justify-between h-screen bg-white w-64 text-teal-600 shadow-lg relative">
-      {/* Profile Icon - Signout at the top right */}
       <div className="absolute top-4 right-4">
         <FaUserCircle
           size={40}
@@ -23,7 +37,6 @@ const Sidebar = () => {
         />
       </div>
 
-      {/* Logo */}
       <div className="flex justify-center items-center py-8">
         <img
           src="/images/logo.jpg"
@@ -32,114 +45,71 @@ const Sidebar = () => {
         />
       </div>
 
-      {/* Navigation */}
       <nav className="flex-grow flex flex-col items-center justify-center">
         <ul className="space-y-4 text-xl font-semibold w-full">
           {/* Dashboard */}
           <li className="text-center w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${
-                selectedItem === 'dashboard' ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'
-              }`}
-              onClick={() => {
-                setSelectedItem('dashboard');
-                navigate('/home/dashboard');
-              }}
+              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/dashboard') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              onClick={() => navigate('/dashboard')}
             >
-              <span className="text-4xl">
-                <FaHome />
-              </span>
-              <span className="font-semibold">Dashboard</span>
+              <FaHome size={24} />
+              <span>Dashboard</span>
             </button>
           </li>
 
           {/* Customer */}
           <li className="text-center w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${
-                selectedItem === 'customer' ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'
-              }`}
-              onClick={() => {
-                setSelectedItem('customer');
-                navigate('/home/customer');
-              }}
+              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/customers') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              onClick={() => navigate('/customers')}
             >
-              <span className="text-4xl">
-                <FaClipboardList />
-              </span>
-              <span className="font-semibold">Customer</span>
+              <FaClipboardList size={24} />
+              <span>Customer</span>
             </button>
           </li>
 
           {/* Property */}
           <li className="text-center w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${
-                selectedItem === 'property' ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'
-              }`}
-              onClick={() => {
-                setSelectedItem('property');
-                navigate('/home/property');
-              }}
+              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/property') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              onClick={() => navigate('/property')}
             >
-              <span className="text-4xl">
-                <FaBuilding />
-              </span>
-              <span className="font-semibold">Property</span>
+              <FaBuilding size={24} />
+              <span>Property</span>
             </button>
           </li>
 
           {/* Facilities */}
           <li className="text-center w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${
-                selectedItem === 'facilities' ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'
-              }`}
-              onClick={() => {
-                setSelectedItem('facilities');
-                navigate('/home/facilities');
-              }}
+              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/facilities') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              onClick={() => navigate('/facilities')}
             >
-              <span className="text-4xl">
-                <FaMapMarkerAlt />
-              </span>
-              <span className="font-semibold">Facilities</span>
+              <FaMapMarkerAlt size={24} />
+              <span>Facilities</span>
             </button>
           </li>
 
           {/* Categories */}
           <li className="text-center w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${
-                selectedItem === 'categories' ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'
-              }`}
-              onClick={() => {
-                setSelectedItem('categories');
-                navigate('/home/categories');
-              }}
+              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/categories') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              onClick={() => navigate('/categories')}
             >
-              <span className="text-4xl">
-                <FaClipboardList />
-              </span>
-              <span className="font-semibold">Categories</span>
+              <FaClipboardList size={24} />
+              <span>Categories</span>
             </button>
           </li>
 
           {/* Slider */}
           <li className="text-center w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${
-                selectedItem === 'slider' ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'
-              }`}
-              onClick={() => {
-                setSelectedItem('slider');
-                navigate('/home/slider');
-              }}
+              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/slider') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              onClick={() => navigate('/slider')}
             >
-              <span className="text-4xl">
-                <FaSlidersH />
-              </span>
-              <span className="font-semibold">Slider</span>
+              <FaSlidersH size={24} />
+              <span>Slider</span>
             </button>
           </li>
         </ul>

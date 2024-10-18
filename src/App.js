@@ -1,39 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
-
+import config from './configs/config';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
-// Helper function to check if a cookie exists
-const getCookie = (cookieName) => {
-  const name = cookieName + "=";
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const cookieArray = decodedCookie.split(';');
-  for (let i = 0; i < cookieArray.length; i++) {
-    let cookie = cookieArray[i].trim();
-    if (cookie.indexOf(name) === 0) {
-      return cookie.substring(name.length, cookie.length);
-    }
-  }
-  return "";
-};
-
 const App = () => {
-  const isLoggedIn = getCookie('isLogged'); // Check if 'isLogged' cookie exists
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
+
+  useEffect(() => {
+    // Fetch current user
+    axios.get(`${config.baseUrl}/auth/currentuser`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+      .then((response) => {
+        if (response.status === 200 && response.data) {
+          setIsAuthenticated(true); // User is authenticated
+        } else {
+          setIsAuthenticated(false); // Not authenticated
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching current user:', error);
+        setIsAuthenticated(false); // Handle error
+      })
+      .finally(() => {
+        setIsLoading(false); // Set loading to false after the check is complete
+      });
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
-        
         <Route path="/register" element={<Register />} />
+        {/* Protected Routes */}
         <Route
-          path="/home/*"
-          element={isLoggedIn ? <Home /> : <Navigate to="/login" />} // Redirect to login if not logged in
+          path="/*"
+          element={
+            // <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Home />
+            // </ProtectedRoute>
+          }
         />
-        <Route path="/" element={<Navigate to={isLoggedIn ? '/home' : '/login'} />} />
       </Routes>
     </Router>
   );
