@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaUserCircle, FaHome, FaClipboardList, FaMapMarkerAlt, FaBuilding, FaSlidersH } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import config from '../configs/config';
 
 const Sidebar = () => {
-  const location = useLocation(); // Get current URL
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleSignout = async () => {
@@ -25,14 +25,14 @@ const Sidebar = () => {
     }
   };
 
-  const isSelected = (path) => location.pathname === path; // Check if the current path matches
+  const isSelected = (path) => location.pathname === path;
 
   return (
-    <div className="flex flex-col justify-between h-screen bg-white w-64 text-teal-600 shadow-lg relative">
+    <div className="flex flex-col justify-between h-screen bg-gray-800 w-64 text-white shadow-lg">
       <div className="absolute top-4 right-4">
         <FaUserCircle
           size={40}
-          className="text-black hover:scale-110 transition-transform duration-300 cursor-pointer"
+          className="text-white hover:scale-110 transition-transform duration-300 cursor-pointer"
           onClick={handleSignout}
         />
       </div>
@@ -41,16 +41,18 @@ const Sidebar = () => {
         <img
           src="/images/logo.jpg"
           alt="Logo"
-          className="w-20 h-auto rounded-full shadow-lg border-2 border-gray-300"
+          className="w-24 h-auto rounded-full shadow-lg border-2 border-teal-500"
         />
       </div>
 
-      <nav className="flex-grow flex flex-col items-center justify-center">
-        <ul className="space-y-4 text-xl font-semibold w-full">
+      <nav className="flex-grow flex flex-col items-start pl-6">
+        <ul className="space-y-4 text-lg font-semibold w-full">
           {/* Dashboard */}
-          <li className="text-center w-full">
+          <li className="w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/dashboard') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              className={`flex items-center space-x-4 px-4 py-3 transition-all duration-300 rounded-lg w-full ${
+                isSelected('/dashboard') ? 'bg-teal-500 text-white shadow-md' : 'hover:bg-teal-600'
+              }`}
               onClick={() => navigate('/dashboard')}
             >
               <FaHome size={24} />
@@ -59,9 +61,11 @@ const Sidebar = () => {
           </li>
 
           {/* Customer */}
-          <li className="text-center w-full">
+          <li className="w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/customers') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              className={`flex items-center space-x-4 px-4 py-3 transition-all duration-300 rounded-lg w-full ${
+                isSelected('/customers') ? 'bg-teal-500 text-white shadow-md' : 'hover:bg-teal-600'
+              }`}
               onClick={() => navigate('/customers')}
             >
               <FaClipboardList size={24} />
@@ -70,9 +74,11 @@ const Sidebar = () => {
           </li>
 
           {/* Property */}
-          <li className="text-center w-full">
+          <li className="w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/property') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              className={`flex items-center space-x-4 px-4 py-3 transition-all duration-300 rounded-lg w-full ${
+                isSelected('/property') ? 'bg-teal-500 text-white shadow-md' : 'hover:bg-teal-600'
+              }`}
               onClick={() => navigate('/property')}
             >
               <FaBuilding size={24} />
@@ -81,9 +87,11 @@ const Sidebar = () => {
           </li>
 
           {/* Facilities */}
-          <li className="text-center w-full">
+          <li className="w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/facilities') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              className={`flex items-center space-x-4 px-4 py-3 transition-all duration-300 rounded-lg w-full ${
+                isSelected('/facilities') ? 'bg-teal-500 text-white shadow-md' : 'hover:bg-teal-600'
+              }`}
               onClick={() => navigate('/facilities')}
             >
               <FaMapMarkerAlt size={24} />
@@ -92,9 +100,11 @@ const Sidebar = () => {
           </li>
 
           {/* Categories */}
-          <li className="text-center w-full">
+          <li className="w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/categories') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              className={`flex items-center space-x-4 px-4 py-3 transition-all duration-300 rounded-lg w-full ${
+                isSelected('/categories') ? 'bg-teal-500 text-white shadow-md' : 'hover:bg-teal-600'
+              }`}
               onClick={() => navigate('/categories')}
             >
               <FaClipboardList size={24} />
@@ -103,9 +113,11 @@ const Sidebar = () => {
           </li>
 
           {/* Slider */}
-          <li className="text-center w-full">
+          <li className="w-full">
             <button
-              className={`flex items-center justify-start space-x-4 py-4 transition-all duration-300 rounded-lg w-full ${isSelected('/slider') ? 'bg-teal-300 text-white' : 'hover:bg-teal-300 text-teal-600'}`}
+              className={`flex items-center space-x-4 px-4 py-3 transition-all duration-300 rounded-lg w-full ${
+                isSelected('/slider') ? 'bg-teal-500 text-white shadow-md' : 'hover:bg-teal-600'
+              }`}
               onClick={() => navigate('/slider')}
             >
               <FaSlidersH size={24} />
