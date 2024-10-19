@@ -16,7 +16,7 @@ const Home = () => {
       <Sidebar />
 
       {/* Right Content */}
-      <div className="flex-grow bg-f7f7f7 p-6">
+      <div className="flex-grow bg-f7f7f7 p-6 ml-64">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/customers" element={<Customer />} />

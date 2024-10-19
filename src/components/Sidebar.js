@@ -28,7 +28,7 @@ const Sidebar = () => {
   const isSelected = (path) => location.pathname === path;
 
   return (
-    <div className="flex flex-col justify-between h-screen bg-gray-800 w-64 text-white shadow-lg">
+    <div className="flex flex-col justify-between h-screen bg-gray-800 w-64 text-white shadow-lg fixed">
       <div className="absolute top-4 right-4">
         <FaUserCircle
           size={40}
