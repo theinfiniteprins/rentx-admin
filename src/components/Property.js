@@ -66,7 +66,7 @@ const Property = () => {
                 <td className="px-6 py-4">{property.title}</td>
                 <td className="px-6 py-4">{property.category.name}</td>
                 <td className="px-6 py-4">{property.monthlyRent}</td>
-                <td className="px-6 py-4">{property.city}</td>
+                <td className="px-6 py-4">{property.city},{property.state}</td>
                 <td className="px-6 py-4">
                   <button
                     onClick={() => handleDelete(property._id)}
