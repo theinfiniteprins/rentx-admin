@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
-import { cloudinaryConfigResources } from "../configs/cloudinaryConfigResources";
+import { cloudinaryConfigResources } from "../configs/cloudinaryConfig";
+import config from "../configs/config"; // Import configuration for base URL
 
 const Facility = () => {
   const [facilities, setFacilities] = useState([]);
@@ -11,20 +12,19 @@ const Facility = () => {
 
   const [newFacility, setNewFacility] = useState({
     name: "",
-    type: "number",  // Default to "number"
+    type: "number", // Default to "number"
     iconImage: "",
   });
   const [isAddingFacility, setIsAddingFacility] = useState(false);
   const [imageFile, setImageFile] = useState(null);
 
+  const baseUrl = config.baseUrl; // Use base URL from config
+
   const fetchFacilities = async () => {
     try {
-      const response = await axios.get(
-        "https://rent-x-backend-nine.vercel.app/facilities/",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${baseUrl}/facilities/`, {
+        withCredentials: true,
+      });
       setFacilities(response.data);
       setLoading(false);
     } catch (error) {
@@ -35,14 +35,13 @@ const Facility = () => {
 
   useEffect(() => {
     fetchFacilities();
-  }, []);
+  }, [baseUrl]);
 
   // Cloudinary image upload function
   const uploadImageToCloudinary = async (imageFile) => {
     const formData = new FormData();
     formData.append("file", imageFile);
     formData.append("upload_preset", cloudinaryConfigResources.uploadPreset);
-    formData.append("cloud_name", cloudinaryConfigResources.cloudName);
     try {
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudinaryConfigResources.cloudName}/image/upload`,
@@ -60,12 +59,9 @@ const Facility = () => {
 
   const handleDelete = async (facilityId) => {
     try {
-      await axios.delete(
-        `https://rent-x-backend-nine.vercel.app/facilities/${facilityId}`,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.delete(`${baseUrl}/facilities/${facilityId}`, {
+        withCredentials: true,
+      });
       fetchFacilities(); // Re-fetch facilities after successful deletion
     } catch (error) {
       console.error("Error deleting facility:", error);
@@ -79,13 +75,9 @@ const Facility = () => {
 
   const handleSave = async (facilityId) => {
     try {
-      await axios.put(
-        `https://rent-x-backend-nine.vercel.app/facilities/${facilityId}`,
-        editedFacility,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.put(`${baseUrl}/facilities/${facilityId}`, editedFacility, {
+        withCredentials: true,
+      });
       setEditingFacilityId(null);
       fetchFacilities(); // Re-fetch the updated facilities list after saving
     } catch (error) {
@@ -121,13 +113,9 @@ const Facility = () => {
         }
         newFacility.iconImage = imageUrl;
       }
-      await axios.post(
-        "https://rent-x-backend-nine.vercel.app/facilities/",
-        newFacility,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.post(`${baseUrl}/facilities/`, newFacility, {
+        withCredentials: true,
+      });
       fetchFacilities(); // Re-fetch the updated facilities list after adding
       setNewFacility({ name: "", type: "number", iconImage: "" });
       setIsAddingFacility(false);
@@ -162,10 +150,7 @@ const Facility = () => {
           <div className="space-y-4">
             {/* Facility Name Input */}
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                 Facility Name
               </label>
               <input
@@ -181,10 +166,7 @@ const Facility = () => {
 
             {/* Facility Type Input */}
             <div>
-              <label
-                htmlFor="type"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
                 Facility Type
               </label>
               <select
@@ -201,10 +183,7 @@ const Facility = () => {
 
             {/* Image Upload Input */}
             <div>
-              <label
-                htmlFor="iconImage"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="iconImage" className="block text-sm font-medium text-gray-700 mb-2">
                 Facility Icon Image
               </label>
               <input
@@ -242,16 +221,9 @@ const Facility = () => {
       {/* Facilities Display - Two per row */}
       <div className="grid grid-cols-2 gap-4">
         {facilities.map((facility) => (
-          <div
-            key={facility._id}
-            className="p-4 border rounded-md bg-white shadow-md"
-          >
+          <div key={facility._id} className="p-4 border rounded-md bg-white shadow-md">
             <div className="flex items-center space-x-4">
-              <img
-                src={facility.iconImage}
-                alt={facility.name}
-                className="w-20 h-20 rounded-md"
-              />
+              <img src={facility.iconImage} alt={facility.name} className="w-20 h-20 rounded-md" />
               <div>
                 {editingFacilityId === facility._id ? (
                   <>

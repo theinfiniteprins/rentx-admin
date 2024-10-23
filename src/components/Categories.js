@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
-import { cloudinaryConfigResources } from "../configs/cloudinaryConfigResources";
+import { cloudinaryConfigResources } from "../configs/cloudinaryConfig";
+import config from "../configs/config"; // Import config for baseUrl
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -25,10 +26,10 @@ const Category = () => {
   const fetchCategories = async () => {
     try {
       const [categoryResponse, facilityResponse] = await Promise.all([
-        axios.get("https://rent-x-backend-nine.vercel.app/categories/", {
+        axios.get(`${config.baseUrl}/categories/`, {
           withCredentials: true,
         }),
-        axios.get("https://rent-x-backend-nine.vercel.app/facilities/", {
+        axios.get(`${config.baseUrl}/facilities/`, {
           withCredentials: true,
         }),
       ]);
@@ -88,7 +89,7 @@ const Category = () => {
       }
       newCategory.facilities = selectedFacilities; // Set selected facilities
       await axios.post(
-        "https://rent-x-backend-nine.vercel.app/categories/",
+        `${config.baseUrl}/categories/`,
         newCategory,
         { withCredentials: true }
       );
@@ -105,7 +106,7 @@ const Category = () => {
   const handleDelete = async (categoryId) => {
     try {
       await axios.delete(
-        `https://rent-x-backend-nine.vercel.app/categories/${categoryId}`,
+        `${config.baseUrl}/categories/${categoryId}`,
         { withCredentials: true }
       );
       fetchCategories(); // Re-fetch categories after deletion
@@ -124,7 +125,7 @@ const Category = () => {
     try {
       editedCategory.facilities = selectedFacilities; // Update facilities for edited category
       await axios.put(
-        `https://rent-x-backend-nine.vercel.app/categories/${editingCategoryId}`,
+        `${config.baseUrl}/categories/${editingCategoryId}`,
         editedCategory,
         { withCredentials: true }
       );

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaPlus, FaSearch, FaTrash, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import config from '../configs/config'; // Import the config to use the base URL
 
 const Slider = () => {
   const [properties, setProperties] = useState([]);
-  const [sliderProperties, setSliderProperties] = useState([]); // State for slider properties
+  const [sliderProperties, setSliderProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -14,7 +15,7 @@ const Slider = () => {
     // Fetch all properties
     const fetchProperties = async () => {
       try {
-        const response = await axios.get('https://rent-x-backend-nine.vercel.app/properties/', {
+        const response = await axios.get(`${config.baseUrl}/properties/`, { // Use config.baseUrl
           withCredentials: true,
         });
         setProperties(response.data);
@@ -29,7 +30,7 @@ const Slider = () => {
     // Fetch slider properties
     const fetchSliderProperties = async () => {
       try {
-        const response = await axios.get('https://rent-x-backend-nine.vercel.app/slider/', {
+        const response = await axios.get(`${config.baseUrl}/slider/`, { // Use config.baseUrl
           withCredentials: true,
         });
         setSliderProperties(response.data);
@@ -46,7 +47,7 @@ const Slider = () => {
   const handleAddToSlider = async (propertyId) => {
     try {
       await axios.post(
-        'https://rent-x-backend-nine.vercel.app/slider/',
+        `${config.baseUrl}/slider/`, // Use config.baseUrl
         {
           property: propertyId,
         },
@@ -54,7 +55,7 @@ const Slider = () => {
           withCredentials: true,
         }
       );
-      setShowModal(false); // Close modal after adding
+      setShowModal(false);
     } catch (error) {
       console.error('Error adding property to slider:', error);
     }
@@ -64,15 +65,14 @@ const Slider = () => {
   const handleToggleActive = async (sliderId, currentStatus) => {
     try {
       await axios.put(
-        `https://rent-x-backend-nine.vercel.app/slider/${sliderId}`,
+        `${config.baseUrl}/slider/${sliderId}`, // Use config.baseUrl
         {
-          isActive: !currentStatus, // Toggle the current status
+          isActive: !currentStatus,
         },
         {
           withCredentials: true,
         }
       );
-      // Refresh slider properties after the update
       const updatedSliderProperties = sliderProperties.map((sliderItem) =>
         sliderItem._id === sliderId ? { ...sliderItem, isActive: !currentStatus } : sliderItem
       );
@@ -85,10 +85,9 @@ const Slider = () => {
   // Function to delete a property from the slider
   const handleDeleteProperty = async (sliderId) => {
     try {
-      await axios.delete(`https://rent-x-backend-nine.vercel.app/slider/${sliderId}`, {
+      await axios.delete(`${config.baseUrl}/slider/${sliderId}`, { // Use config.baseUrl
         withCredentials: true,
       });
-      // Remove the deleted property from the local state
       setSliderProperties(sliderProperties.filter((sliderItem) => sliderItem._id !== sliderId));
     } catch (error) {
       console.error('Error deleting property from slider:', error);
@@ -121,7 +120,6 @@ const Slider = () => {
         <FaPlus className="inline-block mr-2" /> Add Property to Slider
       </button>
 
-      {/* List slider properties */}
       <h2 className="text-xl font-bold my-4">Properties in Slider</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
@@ -179,7 +177,6 @@ const Slider = () => {
         </table>
       </div>
 
-      {/* Modal for selecting property */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
@@ -190,7 +187,6 @@ const Slider = () => {
               </button>
             </div>
 
-            {/* Search Input */}
             <div className="mb-4 flex items-center">
               <input
                 type="text"
@@ -202,7 +198,6 @@ const Slider = () => {
               <FaSearch className="ml-2 text-gray-500" />
             </div>
 
-            {/* Properties list */}
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white">
                 <thead>

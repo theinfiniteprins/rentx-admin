@@ -1,45 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
+import config from '../configs/config'; // Import the configuration file
 
 const Dashboard = () => {
   const [userName, setUserName] = useState('');
   const [totalProperties, setTotalProperties] = useState(0);
   const [totalCustomers, setTotalCustomers] = useState(0);
 
+  const baseUrl = config.baseUrl; // Use the base URL from the config file
+
   // Fetch user details, total properties, and total users
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch current user
-        const userResponse = await fetch(
-          'https://rent-x-backend-nine.vercel.app/auth/currentuser',
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+        const userResponse = await fetch(`${baseUrl}/auth/currentuser`, {
+          method: 'GET',
+          credentials: 'include',
+        });
         const userData = await userResponse.json();
         setUserName(userData.name);
 
         // Fetch total properties
-        const propertiesResponse = await fetch(
-          'https://rent-x-backend-nine.vercel.app/properties/',
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+        const propertiesResponse = await fetch(`${baseUrl}/properties/`, {
+          method: 'GET',
+          credentials: 'include',
+        });
         const propertiesData = await propertiesResponse.json();
         setTotalProperties(propertiesData.length);
 
         // Fetch total users
-        const usersResponse = await fetch(
-          'https://rent-x-backend-nine.vercel.app/users/',
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+        const usersResponse = await fetch(`${baseUrl}/users/`, {
+          method: 'GET',
+          credentials: 'include',
+        });
         const usersData = await usersResponse.json();
         setTotalCustomers(usersData.length);
       } catch (error) {
@@ -48,7 +42,7 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, []);
+  }, [baseUrl]);
 
   return (
     <div className="p-1">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaTrash } from 'react-icons/fa';
+import config from '../configs/config'; // Import the configuration
 
 const Property = () => {
   const [properties, setProperties] = useState([]);
@@ -9,7 +10,7 @@ const Property = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get('https://rent-x-backend-nine.vercel.app/properties/', {
+        const response = await axios.get(`${config.baseUrl}/properties/`, {
           withCredentials: true,
         });
         setProperties(response.data);
@@ -24,7 +25,7 @@ const Property = () => {
 
   const handleDelete = async (propertyId) => {
     try {
-      await axios.delete(`https://rent-x-backend-nine.vercel.app/properties/${propertyId}`, {
+      await axios.delete(`${config.baseUrl}/properties/${propertyId}`, {
         withCredentials: true,
       });
       // Update state after successful deletion
@@ -66,7 +67,7 @@ const Property = () => {
                 <td className="px-6 py-4">{property.title}</td>
                 <td className="px-6 py-4">{property.category.name}</td>
                 <td className="px-6 py-4">{property.monthlyRent}</td>
-                <td className="px-6 py-4">{property.city},{property.state}</td>
+                <td className="px-6 py-4">{property.city}, {property.state}</td>
                 <td className="px-6 py-4">
                   <button
                     onClick={() => handleDelete(property._id)}

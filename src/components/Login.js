@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import config from "../configs/config";
+import config from "../configs/config"; // Import base URL config
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,16 +28,14 @@ const Login = () => {
       });
 
       // Check if the response is successful
-      if (response.ok ) {
-        
+      if (response.ok) {
         // Store JWT token in the browser's cookie (handled by server if HttpOnly)
-        
         // Set a custom `isLogged` cookie to indicate successful login without an expiration timer
         const isSecure = window.location.protocol === 'https:'; // Check if running over HTTPS
         document.cookie = `isLogged=true; path=/; ${isSecure ? 'secure;' : ''} SameSite=Strict`;
         
         console.log('Login successful');
-        navigate('/dashboard'); // Redirect to the home screen after login
+        navigate('/dashboard'); // Redirect to the dashboard after login
       } else {
         const result = await response.json();
         setError(result.message || 'Login failed'); // Display error message from API

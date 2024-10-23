@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import config from '../configs/config'; // Import the configuration file
 
 const Customer = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Using the baseUrl from the config file
+  const baseUrl = config.baseUrl;
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://rent-x-backend-nine.vercel.app/users/', {
+        const response = await axios.get(`${baseUrl}/users/`, {
           withCredentials: true,
         });
         setUsers(response.data);
@@ -20,22 +24,20 @@ const Customer = () => {
       }
     };
     fetchUsers();
-  }, []);
+  }, [baseUrl]);
 
   const handleBlockToggle = async (userId, isBlocked) => {
     try {
       await axios.put(
-        `https://rent-x-backend-nine.vercel.app/users/${userId}`,
-        { isBlocked: !isBlocked }, // Only send isBlocked property
+        `${baseUrl}/users/${userId}`,
+        { isBlocked: !isBlocked },
         { withCredentials: true }
       );
-      // Update state after successful toggle
       setUsers(users.map(user => (user._id === userId ? { ...user, isBlocked: !isBlocked } : user)));
     } catch (error) {
       console.error('Error toggling block status:', error);
     }
   };
-  
 
   if (loading) {
     return <p>Loading...</p>;
