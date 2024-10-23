@@ -42,6 +42,7 @@ const Facility = () => {
     const formData = new FormData();
     formData.append("file", imageFile);
     formData.append("upload_preset", cloudinaryConfigResources.uploadPreset);
+    formData.append("cloud_name", cloudinaryConfigResources.cloudName);
     try {
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudinaryConfigResources.cloudName}/image/upload`,
