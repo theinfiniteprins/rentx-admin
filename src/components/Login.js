@@ -18,7 +18,7 @@ const Login = () => {
 
     try {
       // Send a POST request to the authentication API
-      const response = await fetch(`${config.baseUrl}/auth/signin`, {
+      const response = await fetch(`${config.baseUrl}/auth/signin-admin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ const Login = () => {
       });
 
       // Check if the response is successful
-      if (response.ok) {
+      if (response.ok ) {
         const data = await response.json();
         
         // Store JWT token in the browser's cookie (handled by server if HttpOnly)
@@ -81,10 +81,6 @@ const Login = () => {
           Login
         </button>
       </form>
-
-      <p className="text-center mt-4">
-        New user? <Link to="/register" className="text-teal-600">Register here</Link>
-      </p>
     </div>
   );
 };
