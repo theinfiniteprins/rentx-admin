@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import config from "../configs/config";
 
 const Login = () => {
@@ -29,7 +29,6 @@ const Login = () => {
 
       // Check if the response is successful
       if (response.ok ) {
-        const data = await response.json();
         
         // Store JWT token in the browser's cookie (handled by server if HttpOnly)
         
